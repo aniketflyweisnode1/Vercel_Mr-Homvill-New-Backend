@@ -9,6 +9,9 @@ const server = http.createServer(app);
 app.use(cors());
 app.use(express.json());
 connectDB();
+app.get("/", (req, res) => {
+        res.send("Hello World!");
+});
 app.use('/api', routes);
 server.listen(port, async () => {
     console.log(`app is running on port`, port)
