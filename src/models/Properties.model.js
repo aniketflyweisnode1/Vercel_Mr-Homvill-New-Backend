@@ -17,6 +17,11 @@ const propertiesSchema = new mongoose.Schema({
     ref: 'Properties_Category',
     required: true
   },
+  Properties_for: {
+    type: String,
+    enum: ['Sell', 'Rent', 'Buy'],
+    required: true
+  },
   Owner_Fist_name: {
     type: String,
     required: true,

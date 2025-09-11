@@ -34,6 +34,17 @@ const privacyPolicyRoutes = require('./admin/privacy_policy/privacyPolicy.route.
 const faqRoutes = require('./admin/faq/faq.route.js');
 const pushNotificationRoutes = require('./admin/push_notification/pushNotification.route.js');
 const ticketRoutes = require('./admin/ticket/ticket.route.js');
+const boostAdvertisementPlanRoutes = require('./admin/boost_advertisement_plan/boostAdvertisementPlan.route.js');
+const boostAdvertisementOfferRoutes = require('./admin/boost_advertisement_offer/boostAdvertisementOffer.route.js');
+const searchRoutes = require('./user/search/search.route.js');
+const boostPropertiesRoutes = require('./user/boost_properties/boostProperties.route.js');
+const propertiesSavedHomesRoutes = require('./user/properties_saved_homes/propertiesSavedHomes.route.js');
+const propertiesSavedSearchesRoutes = require('./user/properties_saved_searches/propertiesSavedSearches.route.js');
+const propertiesYourHomeRoutes = require('./user/properties_your_home/propertiesYourHome.route.js');
+const propertiesRenterHubRoutes = require('./user/properties_renter_hub/propertiesRenterHub.route.js');
+const propertiesRecentlyViewedRoutes = require('./user/properties_recently_viewed/propertiesRecentlyViewed.route.js');
+const propertiesManageToursRoutes = require('./user/properties_manage_tours/propertiesManageTours.route.js');
+const yourFavoritePropertiesRoutes = require('./user/your_favorite_properties/yourFavoriteProperties.route.js');
 // Use routes
 router.use('/user', userRoutes);
 router.use('/responsibility', responsibilityRoutes);
@@ -67,5 +78,16 @@ router.use('/privacy-policy', privacyPolicyRoutes);
 router.use('/faq', faqRoutes);
 router.use('/push-notification', pushNotificationRoutes);
 router.use('/ticket', ticketRoutes);
+router.use('/boost-advertisement-plan', boostAdvertisementPlanRoutes);
+router.use('/boost-advertisement-offer', boostAdvertisementOfferRoutes);
+router.use('/search', searchRoutes);
+router.use('/boost-properties', boostPropertiesRoutes);
+router.use('/properties-saved-homes', propertiesSavedHomesRoutes);
+router.use('/properties-saved-searches', propertiesSavedSearchesRoutes);
+router.use('/properties-your-home', propertiesYourHomeRoutes);
+router.use('/properties-renter-hub', propertiesRenterHubRoutes);
+router.use('/properties-recently-viewed', propertiesRecentlyViewedRoutes);
+router.use('/properties-manage-tours', propertiesManageToursRoutes);
+router.use('/your-favorite-properties', yourFavoritePropertiesRoutes);
 
 module.exports = router;

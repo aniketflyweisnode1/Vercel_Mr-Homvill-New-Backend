@@ -9,6 +9,7 @@ const createProperties = async (req, res) => {
     const {
       Properties_Status_id,
       Properties_Category_id,
+      Properties_for,
       Owner_Fist_name,
       Owner_Last_name,
       Owner_phone_no,
@@ -63,6 +64,7 @@ const createProperties = async (req, res) => {
     const properties = new Properties({
       Properties_Status_id: parseInt(Properties_Status_id),
       Properties_Category_id: parseInt(Properties_Category_id),
+      Properties_for,
       Owner_Fist_name,
       Owner_Last_name,
       Owner_phone_no,
