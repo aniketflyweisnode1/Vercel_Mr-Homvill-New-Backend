@@ -45,6 +45,17 @@ const propertiesRenterHubRoutes = require('./user/properties_renter_hub/properti
 const propertiesRecentlyViewedRoutes = require('./user/properties_recently_viewed/propertiesRecentlyViewed.route.js');
 const propertiesManageToursRoutes = require('./user/properties_manage_tours/propertiesManageTours.route.js');
 const yourFavoritePropertiesRoutes = require('./user/your_favorite_properties/yourFavoriteProperties.route.js');
+const planRoutes = require('./admin/plan/plan.route.js');
+const planMapUserRoutes = require('./user/plan_map_user/planMapUser.route.js');
+const industryGetStartedSellerRoutes = require('./user/industry_get_started_seller/industryGetStartedSeller.route.js');
+const industryGetStartedManagerRoutes = require('./user/industry_get_started_manager/industryGetStartedManager.route.js');
+const industryGetStartedLandlordRoutes = require('./user/industry_get_started_landlord/industryGetStartedLandlord.route.js');
+const industryGetStartedRemodelingCompanyRoutes = require('./user/industry_get_started_remodeling_company/industryGetStartedRemodelingCompany.route.js');
+const industryGetStartedLocalAdvertiserRoutes = require('./user/industry_get_started_local_advertiser/industryGetStartedLocalAdvertiser.route.js');
+const giftCardsTypeRoutes = require('./admin/gift_cards_type/giftCardsType.route.js');
+const couponsRoutes = require('./admin/coupons/coupons.route.js');
+const giftCardsMapUserRoutes = require('./user/gift_cards_map_user/giftCardsMapUser.route.js');
+const couponsMapUserRoutes = require('./user/coupons_map_user/couponsMapUser.route.js');
 // Use routes
 router.use('/user', userRoutes);
 router.use('/responsibility', responsibilityRoutes);
@@ -89,5 +100,16 @@ router.use('/properties-renter-hub', propertiesRenterHubRoutes);
 router.use('/properties-recently-viewed', propertiesRecentlyViewedRoutes);
 router.use('/properties-manage-tours', propertiesManageToursRoutes);
 router.use('/your-favorite-properties', yourFavoritePropertiesRoutes);
+router.use('/plan', planRoutes);
+router.use('/plan-map-user', planMapUserRoutes);
+router.use('/industry-get-started-seller', industryGetStartedSellerRoutes);
+router.use('/industry-get-started-manager', industryGetStartedManagerRoutes);
+router.use('/industry-get-started-landlord', industryGetStartedLandlordRoutes);
+router.use('/industry-get-started-remodeling-company', industryGetStartedRemodelingCompanyRoutes);
+router.use('/industry-get-started-local-advertiser', industryGetStartedLocalAdvertiserRoutes);
+router.use('/gift-cards-type', giftCardsTypeRoutes);
+router.use('/coupons', couponsRoutes);
+router.use('/gift-cards-map-user', giftCardsMapUserRoutes);
+router.use('/coupons-map-user', couponsMapUserRoutes);
 
 module.exports = router;
