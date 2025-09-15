@@ -8,7 +8,9 @@ const {
   deleteUser,
   softDeleteUser,
   getUserByAuth,
-  logout
+  logout,
+  activateUser,
+  deactivateUser
 } = require('../../controllers/User.Controller.js');
 const {
   loginUser,
@@ -69,5 +71,8 @@ router.post('/forget-password/send-otp', validateSendOTP, handleValidationErrors
 router.post('/forget-password/verify-otp', validateVerifyOTP, handleValidationErrors, verifyOTP);
 router.post('/forget-password/reset-password', validateVerifyOTPAndResetPassword, handleValidationErrors, verifyOTPAndResetPassword);
 
+// Account activation/deactivation routes 15/09/2025
+router.patch('/activate', auth, activateUser);
+router.patch('/deactivate', auth, deactivateUser);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   user_id: {
     type: Number,
     unique: true,
-    auto: true
+    required: true
   },
   Name: {
     type: String,
@@ -152,6 +152,18 @@ const userSchema = new mongoose.Schema({
   resetPasswordOTPExpiry: {
     type: Date,
     default: null
+  },
+  two_step_verification: {
+    type: Boolean,
+    default: false
+  },
+  privacy_cookies: {
+    type: Boolean,
+    default: false
+  },
+  account_active: {
+    type: Boolean,
+    default: true
   }
 
 }, {
@@ -161,6 +173,15 @@ const userSchema = new mongoose.Schema({
 
 // Auto-increment for user_id
 userSchema.plugin(AutoIncrement, { inc_field: 'user_id' });
+
+// Set user_id as the primary key for population
+userSchema.virtual('id').get(function() {
+  return this.user_id;
+});
+
+userSchema.set('toJSON', {
+  virtuals: true
+});
 
 // Simple password hashing (for development only - not recommended for production)
 userSchema.pre('save', function(next) {

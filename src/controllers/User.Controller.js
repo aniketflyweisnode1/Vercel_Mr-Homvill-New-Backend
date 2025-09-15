@@ -433,7 +433,77 @@ const logout = async (req, res) => {
   }
 };
 
+// Activate User Account
+const activateUser = async (req, res) => {
+  try {
+    const { user_id } = req.body;
 
+    const user = await User.findOne({ user_id: parseInt(user_id) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    user.account_active = true;
+    user.Status = true;
+    user.isLoginPermission = true;
+    user.UpdatedBy = req.user.user_id;
+    user.UpdatedAt = new Date();
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User account activated successfully',
+      data: user
+    });
+  } catch (error) {
+    console.error('Error activating user:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
+// Deactivate User Account
+const deactivateUser = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+
+    const user = await User.findOne({ user_id: parseInt(user_id) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    user.account_active = false;
+    user.Status = false;
+    user.isLoginPermission = false;
+    user.UpdatedBy = req.user.user_id;
+    user.UpdatedAt = new Date();
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User account deactivated successfully',
+      data: user
+    });
+  } catch (error) {
+    console.error('Error deactivating user:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
 
 module.exports = {
   createUser,
@@ -443,5 +513,7 @@ module.exports = {
   getUserByAuth,
   deleteUser,
   softDeleteUser,
-  logout
+  logout,
+  activateUser,
+  deactivateUser
 };

@@ -56,6 +56,15 @@ const giftCardsTypeRoutes = require('./admin/gift_cards_type/giftCardsType.route
 const couponsRoutes = require('./admin/coupons/coupons.route.js');
 const giftCardsMapUserRoutes = require('./user/gift_cards_map_user/giftCardsMapUser.route.js');
 const couponsMapUserRoutes = require('./user/coupons_map_user/couponsMapUser.route.js');
+const userAddressRoutes = require('./admin/user_address/userAddress.route.js');
+const cartRoutes = require('./admin/cart/cart.route.js');
+const notificationActivityRoutes = require('./user/notification_activity/notificationActivity.route.js');
+const documentPreferencesRoutes = require('./user/document_preferences/documentPreferences.route.js');
+const propertyCategoryRoutes = require('./admin/property_category/propertyCategory.route.js');
+const fileUploadRoutes = require('./admin/fileUpload/fileUpload.route.js');
+const smsRoutes = require('./admin/sms/sms.route.js');
+
+
 // Use routes
 router.use('/user', userRoutes);
 router.use('/responsibility', responsibilityRoutes);
@@ -111,5 +120,12 @@ router.use('/gift-cards-type', giftCardsTypeRoutes);
 router.use('/coupons', couponsRoutes);
 router.use('/gift-cards-map-user', giftCardsMapUserRoutes);
 router.use('/coupons-map-user', couponsMapUserRoutes);
+router.use('/user-address', userAddressRoutes);
+router.use('/cart', cartRoutes);
+router.use('/notification-activity', notificationActivityRoutes);
+router.use('/document-preferences', documentPreferencesRoutes);
+router.use('/property-category', propertyCategoryRoutes);
+router.use('/file-upload', fileUploadRoutes);
+router.use('/sms', smsRoutes);
 
 module.exports = router;
