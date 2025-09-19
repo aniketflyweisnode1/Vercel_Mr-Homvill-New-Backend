@@ -19,7 +19,7 @@ const {
 router.post('/create', auth, validateCreateCountry, handleValidationErrors, createCountry);
 
 // Get all countries
-router.get('/getall', auth, getAllCountries);
+router.get('/getall', getAllCountries);
 
 // Get country by ID
 router.get('/getbyid/:id', auth, getCountryById);

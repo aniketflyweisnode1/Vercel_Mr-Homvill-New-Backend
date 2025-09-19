@@ -19,7 +19,7 @@ const {
 router.post('/create', auth, validateCreateLanguage, handleValidationErrors, createLanguage);
 
 // Get all languages
-router.get('/getall', auth, getAllLanguages);
+router.get('/getall', getAllLanguages);
 
 // Get language by ID
 router.get('/getbyid/:id', auth, getLanguageById);

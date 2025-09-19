@@ -21,7 +21,7 @@ const {
 router.post('/create', auth, validateCreateCity, handleValidationErrors, createCity);
 
 // Get all cities
-router.get('/getall', auth, getAllCities);
+router.get('/getall', getAllCities);
 
 // Get cities by state ID
 router.get('/getbystate/:stateId', auth, getCitiesByStateId);

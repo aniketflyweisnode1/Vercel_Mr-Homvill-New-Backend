@@ -19,7 +19,7 @@ const {
 router.post('/create', auth, validateCreateResponsibility, handleValidationErrors, createResponsibility);
 
 // Get all responsibilities
-router.get('/getall', auth, getAllResponsibilities);
+router.get('/getall', getAllResponsibilities);
 
 // Get responsibility by ID
 router.get('/getbyid/:id', auth, getResponsibilityById);

@@ -19,7 +19,7 @@ const {
 router.post('/create', auth, validateCreateRole, handleValidationErrors, createRole);
 
 // Get all roles
-router.get('/getall', auth, getAllRoles);
+router.get('/getall', getAllRoles);
 
 // Get role by ID
 router.get('/getbyid/:id', auth, getRoleById);

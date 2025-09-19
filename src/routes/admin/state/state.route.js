@@ -20,7 +20,7 @@ const {
 router.post('/create', auth, validateCreateState, handleValidationErrors, createState);
 
 // Get all states
-router.get('/getall', auth, getAllStates);
+router.get('/getall',  getAllStates);
 
 // Get states by country ID
 router.get('/getbycountry/:countryId', auth, getStatesByCountryId);
