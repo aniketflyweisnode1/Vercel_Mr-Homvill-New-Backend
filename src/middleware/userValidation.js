@@ -128,6 +128,22 @@ const validateCreateUser = [
     .optional()
     .isLength({ max: 200 })
     .withMessage('Location must not exceed 200 characters')
+    .trim(),
+  body('zipcode')
+    .optional()
+    .isLength({ min: 3, max: 10 })
+    .withMessage('Zipcode must be between 3 and 10 characters')
+    .trim(),
+  body('adhaar_date')
+    .optional()
+    .isISO8601()
+    .withMessage('Aadhaar date must be a valid date'),
+  body('adhaar_no')
+    .optional()
+    .isLength({ min: 12, max: 12 })
+    .withMessage('Aadhaar number must be exactly 12 digits')
+    .isNumeric()
+    .withMessage('Aadhaar number must contain only digits')
     .trim()
 ];
 
@@ -253,6 +269,22 @@ const validateUpdateUser = [
     .optional()
     .isLength({ max: 200 })
     .withMessage('Location must not exceed 200 characters')
+    .trim(),
+  body('zipcode')
+    .optional()
+    .isLength({ min: 3, max: 10 })
+    .withMessage('Zipcode must be between 3 and 10 characters')
+    .trim(),
+  body('adhaar_date')
+    .optional()
+    .isISO8601()
+    .withMessage('Aadhaar date must be a valid date'),
+  body('adhaar_no')
+    .optional()
+    .isLength({ min: 12, max: 12 })
+    .withMessage('Aadhaar number must be exactly 12 digits')
+    .isNumeric()
+    .withMessage('Aadhaar number must contain only digits')
     .trim()
 ];
 

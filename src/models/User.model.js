@@ -125,6 +125,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  zipcode: {
+    type: String,
+    default: null
+  },
+  adhaar_date: {
+    type: Date,
+    default: null
+  },
+  adhaar_no: {
+    type: String,
+    default: null
+  },
   Status: {
     type: Boolean,
     default: true

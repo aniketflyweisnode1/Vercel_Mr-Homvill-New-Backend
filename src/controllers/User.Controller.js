@@ -38,6 +38,9 @@ const createUser = async (req, res) => {
       rating,
       wallet,
       location,
+      zipcode,
+      adhaar_date,
+      adhaar_no,
       Status
     } = req.body;
     
@@ -73,6 +76,9 @@ const createUser = async (req, res) => {
       rating,
       wallet,
       location,
+      zipcode,
+      adhaar_date,
+      adhaar_no,
       Permissions_type_id,
       Status,
       CreateBy: req.user?.user_id || null
