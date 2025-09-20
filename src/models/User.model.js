@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
   },
   last_name: {
     type: String,
-    required: true,
     trim: true
   },
   Responsibility_id: {

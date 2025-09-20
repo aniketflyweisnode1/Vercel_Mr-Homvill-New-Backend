@@ -40,7 +40,7 @@ const {
 const { auth } = require('../../middleware/authMiddleware.js');
 
 // Create a new user
-router.post('/create', validateCreateUser, handleValidationErrors, createUser);
+router.post('/create',  createUser);
 
 // Get all users with pagination and search
 router.get('/getall',  getAllUsers);
