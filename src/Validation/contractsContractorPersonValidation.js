@@ -2,11 +2,38 @@ const { body, validationResult } = require('express-validator');
 
 // Validation rules for creating contracts contractor person
 const validateCreateContractsContractorPerson = [
-  body('Contracts_Contractor_person_name')
-    .notEmpty()
-    .withMessage('Contracts Contractor person name is required')
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Contracts Contractor person name must be between 2 and 100 characters')
+  body('owner_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Owner ID must be a positive integer'),
+  body('property_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Property ID must be a positive integer'),
+  body('category_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Category ID must be a positive integer'),
+  body('contact_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contact ID must be a positive integer'),
+  body('contractor_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contractor ID must be a positive integer'),
+  body('company_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Company ID must be a positive integer'),
+  body('cost')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Cost must be a non-negative number'),
+  body('address')
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage('Address must not exceed 500 characters')
     .trim()
 ];
 
@@ -17,10 +44,38 @@ const validateUpdateContractsContractorPerson = [
     .withMessage('Contracts Contractor person ID is required')
     .isInt({ min: 1 })
     .withMessage('Contracts Contractor person ID must be a positive integer'),
-  body('Contracts_Contractor_person_name')
+  body('owner_id')
     .optional()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Contracts Contractor person name must be between 2 and 100 characters')
+    .isInt({ min: 1 })
+    .withMessage('Owner ID must be a positive integer'),
+  body('property_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Property ID must be a positive integer'),
+  body('category_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Category ID must be a positive integer'),
+  body('contact_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contact ID must be a positive integer'),
+  body('contractor_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contractor ID must be a positive integer'),
+  body('company_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Company ID must be a positive integer'),
+  body('cost')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Cost must be a non-negative number'),
+  body('address')
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage('Address must not exceed 500 characters')
     .trim()
 ];
 

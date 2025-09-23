@@ -113,10 +113,10 @@ const logoutUser = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { email, password, role_id } = req.body;
-
+    console.log(email, password, role_id);
     // Check if user exists
     const user = await User.findOne({ email });
-    
+   
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -139,13 +139,13 @@ const adminLogin = async (req, res) => {
         message: 'Access denied. Invalid role for admin login.'
       });
     }
-
+console.log(user.password , password);
     // Verify password
-    const isPasswordValid = user.comparePassword(password);
-    if (!isPasswordValid) {
+
+    if (user.password !== password) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: 'Invalid password'
       });
     }
 

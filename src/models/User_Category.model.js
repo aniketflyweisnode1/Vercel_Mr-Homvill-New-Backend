@@ -12,6 +12,10 @@ const userCategorySchema = new mongoose.Schema({
     ref: 'Role',
     required: true
   },
+  Category_name: {
+    type: String,
+    required: true
+  },
   Status: {
     type: Boolean,
     default: true

@@ -1,40 +1,62 @@
 const Contracts_Contractor_person = require('../models/Contracts_Contractor_person.model');
 const User = require('../models/User.model');
+const Contracts_Category = require('../models/Contracts_Category.model');
+const Properties = require('../models/Properties.model');
+const Contracts_Company = require('../models/Contracts_Company.model');
 
 // Create Contracts Contractor Person
 const createContractsContractorPerson = async (req, res) => {
   try {
-    const { Contracts_Contractor_person_name } = req.body;
-
-    // Check if contracts contractor person already exists
-    const existingContractorPerson = await Contracts_Contractor_person.findOne({ 
-      Contracts_Contractor_person_name: Contracts_Contractor_person_name,
-      Status: true
-    });
-    
-    if (existingContractorPerson) {
-      return res.status(400).json({
-        success: false,
-        message: 'Contracts contractor person with this name already exists'
-      });
-    }
+    const { 
+      owner,
+      property_id,
+      category_id,
+      contact,
+      contractor,
+      company_id,
+      cost,
+      address
+    } = req.body;
 
     const contractsContractorPerson = new Contracts_Contractor_person({
-      Contracts_Contractor_person_name: Contracts_Contractor_person_name,
+      owner,
+      property_id,
+      category_id,
+      contact,
+      contractor,
+      company_id,
+      cost,
+      address,
       CreateBy: req.user?.user_id || null
     });
 
     const savedContractorPerson = await contractsContractorPerson.save();
     
     // Fetch related data
-    const createByUser = savedContractorPerson.CreateBy ? 
-      await User.findOne({ user_id: savedContractorPerson.CreateBy }) : null;
+    const [createByUser, category, property, company] = await Promise.all([
+      savedContractorPerson.CreateBy ? User.findOne({ user_id: savedContractorPerson.CreateBy }) : null,
+      savedContractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: savedContractorPerson.category_id }) : null,
+      savedContractorPerson.property_id ? Properties.findOne({ Properties_id: savedContractorPerson.property_id }) : null,
+      savedContractorPerson.company_id ? Contracts_Company.findOne({ Contracts_Company_id: savedContractorPerson.company_id }) : null
+    ]);
 
     const response = savedContractorPerson.toObject();
     response.CreateBy = createByUser ? { 
       user_id: createByUser.user_id, 
       Name: createByUser.Name, 
       email: createByUser.email 
+    } : null;
+    response.category_id = category ? { 
+      Contracts_Category_id: category.Contracts_Category_id, 
+      Contracts_Category_name: category.Contracts_Category_name 
+    } : null;
+    response.property_id = property ? { 
+      Properties_id: property.Properties_id, 
+      Properties_name: property.Properties_name 
+    } : null;
+    response.company_id = company ? { 
+      Contracts_Company_id: company.Contracts_Company_id, 
+      Contracts_Company_name: company.Contracts_Company_name 
     } : null;
     
     res.status(201).json({
@@ -58,9 +80,12 @@ const getAllContractsContractorPersons = async (req, res) => {
       .sort({ CreateAt: -1 });
 
     const contractorPersonsResponse = await Promise.all(contractorPersons.map(async (contractorPerson) => {
-      const [createByUser, updatedByUser] = await Promise.all([
+      const [createByUser, updatedByUser, category, property, company] = await Promise.all([
         contractorPerson.CreateBy ? User.findOne({ user_id: contractorPerson.CreateBy }) : null,
-        contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null
+        contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null,
+        contractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: contractorPerson.category_id }) : null,
+        contractorPerson.property_id ? Properties.findOne({ Properties_id: contractorPerson.property_id }) : null,
+        contractorPerson.company_id ? Contracts_Company.findOne({ Contracts_Company_id: contractorPerson.company_id }) : null
       ]);
 
       const contractorPersonObj = contractorPerson.toObject();
@@ -73,6 +98,18 @@ const getAllContractsContractorPersons = async (req, res) => {
         user_id: updatedByUser.user_id, 
         Name: updatedByUser.Name, 
         email: updatedByUser.email 
+      } : null;
+      contractorPersonObj.category_id = category ? { 
+        Contracts_Category_id: category.Contracts_Category_id, 
+        Contracts_Category_name: category.Contracts_Category_name 
+      } : null;
+      contractorPersonObj.property_id = property ? { 
+        Properties_id: property.Properties_id, 
+        Properties_name: property.Properties_name 
+      } : null;
+      contractorPersonObj.company_id = company ? { 
+        Contracts_Company_id: company.Contracts_Company_id, 
+        Contracts_Company_name: company.Contracts_Company_name 
       } : null;
       return contractorPersonObj;
     }));
@@ -107,9 +144,12 @@ const getContractsContractorPersonById = async (req, res) => {
       });
     }
 
-    const [createByUser, updatedByUser] = await Promise.all([
+    const [createByUser, updatedByUser, category, property, company] = await Promise.all([
       contractorPerson.CreateBy ? User.findOne({ user_id: contractorPerson.CreateBy }) : null,
-      contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null
+      contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null,
+      contractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: contractorPerson.category_id }) : null,
+      contractorPerson.property_id ? Properties.findOne({ Properties_id: contractorPerson.property_id }) : null,
+      contractorPerson.company_id ? Contracts_Company.findOne({ Contracts_Company_id: contractorPerson.company_id }) : null
     ]);
 
     const response = contractorPerson.toObject();
@@ -122,6 +162,18 @@ const getContractsContractorPersonById = async (req, res) => {
       user_id: updatedByUser.user_id, 
       Name: updatedByUser.Name, 
       email: updatedByUser.email 
+    } : null;
+    response.category_id = category ? { 
+      Contracts_Category_id: category.Contracts_Category_id, 
+      Contracts_Category_name: category.Contracts_Category_name 
+    } : null;
+    response.property_id = property ? { 
+      Properties_id: property.Properties_id, 
+      Properties_name: property.Properties_name 
+    } : null;
+    response.company_id = company ? { 
+      Contracts_Company_id: company.Contracts_Company_id, 
+      Contracts_Company_name: company.Contracts_Company_name 
     } : null;
 
     res.status(200).json({
@@ -148,9 +200,10 @@ const getContractsContractorPersonByAuth = async (req, res) => {
     }).sort({ CreateAt: -1 });
 
     const contractorPersonsResponse = await Promise.all(contractorPersons.map(async (contractorPerson) => {
-      const [createByUser, updatedByUser] = await Promise.all([
+      const [createByUser, updatedByUser, category] = await Promise.all([
         contractorPerson.CreateBy ? User.findOne({ user_id: contractorPerson.CreateBy }) : null,
-        contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null
+        contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null,
+        contractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: contractorPerson.category_id }) : null
       ]);
 
       const contractorPersonObj = contractorPerson.toObject();
@@ -163,6 +216,10 @@ const getContractsContractorPersonByAuth = async (req, res) => {
         user_id: updatedByUser.user_id, 
         Name: updatedByUser.Name, 
         email: updatedByUser.email 
+      } : null;
+      contractorPersonObj.category_id = category ? { 
+        Contracts_Category_id: category.Contracts_Category_id, 
+        Contracts_Category_name: category.Contracts_Category_name 
       } : null;
       return contractorPersonObj;
     }));
@@ -205,21 +262,6 @@ const updateContractsContractorPerson = async (req, res) => {
       });
     }
 
-    // Check if Contracts_Contractor_person_name is being updated and if it already exists
-    if (updateData.Contracts_Contractor_person_name) {
-      const existingContractorPerson = await Contracts_Contractor_person.findOne({ 
-        Contracts_Contractor_person_name: updateData.Contracts_Contractor_person_name,
-        Contracts_Contractor_person_id: { $ne: parseInt(id) },
-        Status: true
-      });
-      
-      if (existingContractorPerson) {
-        return res.status(400).json({
-          success: false,
-          message: 'Contracts contractor person with this name already exists'
-        });
-      }
-    }
 
     // Update fields
     Object.keys(updateData).forEach(key => {
@@ -233,9 +275,12 @@ const updateContractsContractorPerson = async (req, res) => {
 
     const updatedContractorPerson = await contractorPerson.save();
     
-    const [createByUser, updatedByUser] = await Promise.all([
+    const [createByUser, updatedByUser, category, property, company] = await Promise.all([
       updatedContractorPerson.CreateBy ? User.findOne({ user_id: updatedContractorPerson.CreateBy }) : null,
-      updatedContractorPerson.UpdatedBy ? User.findOne({ user_id: updatedContractorPerson.UpdatedBy }) : null
+      updatedContractorPerson.UpdatedBy ? User.findOne({ user_id: updatedContractorPerson.UpdatedBy }) : null,
+      updatedContractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: updatedContractorPerson.category_id }) : null,
+      updatedContractorPerson.property_id ? Properties.findOne({ Properties_id: updatedContractorPerson.property_id }) : null,
+      updatedContractorPerson.company_id ? Contracts_Company.findOne({ Contracts_Company_id: updatedContractorPerson.company_id }) : null
     ]);
 
     const response = updatedContractorPerson.toObject();
@@ -248,6 +293,18 @@ const updateContractsContractorPerson = async (req, res) => {
       user_id: updatedByUser.user_id, 
       Name: updatedByUser.Name, 
       email: updatedByUser.email 
+    } : null;
+    response.category_id = category ? { 
+      Contracts_Category_id: category.Contracts_Category_id, 
+      Contracts_Category_name: category.Contracts_Category_name 
+    } : null;
+    response.property_id = property ? { 
+      Properties_id: property.Properties_id, 
+      Properties_name: property.Properties_name 
+    } : null;
+    response.company_id = company ? { 
+      Contracts_Company_id: company.Contracts_Company_id, 
+      Contracts_Company_name: company.Contracts_Company_name 
     } : null;
     
     res.status(200).json({

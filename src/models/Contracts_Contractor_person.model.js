@@ -7,9 +7,43 @@ const contractsContractorPersonSchema = new mongoose.Schema({
     unique: true,
     auto: true
   },
-  Contracts_Contractor_person_name: {
+  owner: {
     type: String,
-    required: true,
+    default: null,
+    trim: true
+  },
+  property_id: {
+    type: Number,
+    ref: 'Properties',
+    default: null
+  },
+  category_id: {
+    type: Number,
+    ref: 'Contracts_Category',
+    default: null
+  },
+  contact: {
+    type: String,
+    default: null,
+    trim: true
+  },
+  contractor: {
+    type: String,
+    default: null,
+    trim: true
+  },
+  company_id: {
+    type: Number,
+    ref: 'Contracts_Company',
+    default: null
+  },
+  cost: {
+    type: Number,
+    default: null
+  },
+  address: {
+    type: String,
+    default: null,
     trim: true
   },
   Status: {

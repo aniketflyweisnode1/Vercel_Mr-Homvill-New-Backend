@@ -6,7 +6,13 @@ const validateCreateUserCategory = [
     .notEmpty()
     .withMessage('Role ID is required')
     .isInt({ min: 1 })
-    .withMessage('Role ID must be a positive integer')
+    .withMessage('Role ID must be a positive integer'),
+  body('Category_name')
+    .notEmpty()
+    .withMessage('Category name is required')
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Category name must be between 2 and 100 characters')
+    .trim()
 ];
 
 // Validation rules for updating user category
@@ -19,7 +25,12 @@ const validateUpdateUserCategory = [
   body('role_id')
     .optional()
     .isInt({ min: 1 })
-    .withMessage('Role ID must be a positive integer')
+    .withMessage('Role ID must be a positive integer'),
+  body('Category_name')
+    .optional()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Category name must be between 2 and 100 characters')
+    .trim()
 ];
 
 // Middleware to handle validation errors

@@ -5,7 +5,7 @@ const User = require('../models/User.model');
 // Create User Category
 const createUserCategory = async (req, res) => {
   try {
-    const { role_id } = req.body;
+    const { role_id, Category_name } = req.body;
 
     // Check if role exists
     const role = await Role.findOne({ Role_id: parseInt(role_id) });
@@ -18,7 +18,7 @@ const createUserCategory = async (req, res) => {
 
     // Check if user category already exists for this role
     const existingUserCategory = await User_Category.findOne({ 
-      role_id: parseInt(role_id),
+      Category_name: Category_name,
       Status: true
     });
     
@@ -31,6 +31,7 @@ const createUserCategory = async (req, res) => {
 
     const userCategory = new User_Category({
       role_id: parseInt(role_id),
+      Category_name: Category_name,
       CreateBy: req.user?.user_id || null
     });
 
