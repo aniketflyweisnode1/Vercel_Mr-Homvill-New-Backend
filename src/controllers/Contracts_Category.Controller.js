@@ -4,7 +4,7 @@ const User = require('../models/User.model');
 // Create Contracts Category
 const createContractsCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, emoji } = req.body;
 
     // Check if contracts category already exists
     const existingCategory = await Contracts_Category.findOne({ 
@@ -21,6 +21,7 @@ const createContractsCategory = async (req, res) => {
 
     const contractsCategory = new Contracts_Category({
       name: name,
+      emoji: emoji || null,
       CreateBy: req.user?.user_id || null
     });
 

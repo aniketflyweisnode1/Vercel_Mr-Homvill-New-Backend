@@ -12,6 +12,11 @@ const contractsCategorySchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  emoji: {
+    type: String,
+    default: null,
+    trim: true
+  },
   Status: {
     type: Boolean,
     default: true

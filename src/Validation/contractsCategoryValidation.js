@@ -7,6 +7,11 @@ const validateCreateContractsCategory = [
     .withMessage('Name is required')
     .isLength({ min: 2, max: 100 })
     .withMessage('Name must be between 2 and 100 characters')
+    .trim(),
+  body('emoji')
+    .optional()
+    .isLength({ max: 10 })
+    .withMessage('Emoji must not exceed 10 characters')
     .trim()
 ];
 
@@ -21,6 +26,11 @@ const validateUpdateContractsCategory = [
     .optional()
     .isLength({ min: 2, max: 100 })
     .withMessage('Name must be between 2 and 100 characters')
+    .trim(),
+  body('emoji')
+    .optional()
+    .isLength({ max: 10 })
+    .withMessage('Emoji must not exceed 10 characters')
     .trim()
 ];
 
