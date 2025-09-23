@@ -167,9 +167,43 @@ const getContractsContractorPersonById = async (req, res) => {
       Contracts_Category_id: category.Contracts_Category_id, 
       Contracts_Category_name: category.Contracts_Category_name 
     } : null;
-    response.property_id = property ? { 
-      Properties_id: property.Properties_id, 
-      Properties_name: property.Properties_name 
+    response.property_id = property ? {
+      Properties_id: property.Properties_id,
+      Properties_Status_id: property.Properties_Status_id,
+      Properties_Category_id: property.Properties_Category_id,
+      Properties_for: property.Properties_for,
+      Owner_Fist_name: property.Owner_Fist_name,
+      Owner_Last_name: property.Owner_Last_name,
+      Owner_phone_no: property.Owner_phone_no,
+      Owner_email: property.Owner_email,
+      Property_cost: property.Property_cost,
+      Property_year_build: property.Property_year_build,
+      Property_Plot_size: property.Property_Plot_size,
+      Property_finished_Sq_ft: property.Property_finished_Sq_ft,
+      Property_Bed_rooms: property.Property_Bed_rooms,
+      Property_Full_Baths: property.Property_Full_Baths,
+      Property_OneTwo_Baths: property.Property_OneTwo_Baths,
+      Property_Address: property.Property_Address,
+      Property_city: property.Property_city,
+      Property_zip: property.Property_zip,
+      Property_country: property.Property_country,
+      Property_state: property.Property_state,
+      Property_Why_sell: property.Property_Why_sell,
+      Property_Reason_Selling: property.Property_Reason_Selling,
+      Property_Listing_Price: property.Property_Listing_Price,
+      Property_Listing_plot_size: property.Property_Listing_plot_size,
+      Property_Listing_Description: property.Property_Listing_Description,
+      Property_photos: property.Property_photos,
+      Appliances: property.Appliances,
+      floors: property.floors,
+      others: property.others,
+      parking: property.parking,
+      Rooms: property.Rooms,
+      Status: property.Status,
+      CreateBy: property.CreateBy,
+      CreateAt: property.CreateAt,
+      UpdatedBy: property.UpdatedBy,
+      UpdatedAt: property.UpdatedAt
     } : null;
     response.company_id = company ? { 
       Contracts_Company_id: company.Contracts_Company_id, 
