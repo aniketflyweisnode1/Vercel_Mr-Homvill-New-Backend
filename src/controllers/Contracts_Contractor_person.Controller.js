@@ -13,6 +13,7 @@ const createContractsContractorPerson = async (req, res) => {
       category_id,
       contact,
       contractor,
+      contracter_img,
       company_id,
       cost,
       address
@@ -24,6 +25,7 @@ const createContractsContractorPerson = async (req, res) => {
       category_id,
       contact,
       contractor,
+      contracter_img,
       company_id,
       cost,
       address,

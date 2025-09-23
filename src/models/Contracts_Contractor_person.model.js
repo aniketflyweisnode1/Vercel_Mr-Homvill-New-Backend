@@ -32,6 +32,11 @@ const contractsContractorPersonSchema = new mongoose.Schema({
     default: null,
     trim: true
   },
+  contracter_img: {
+    type: String,
+    default: null,
+    trim: true
+  },
   company_id: {
     type: Number,
     ref: 'Contracts_Company',

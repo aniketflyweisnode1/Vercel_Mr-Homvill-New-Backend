@@ -2,10 +2,11 @@ const { body, validationResult } = require('express-validator');
 
 // Validation rules for creating contracts contractor person
 const validateCreateContractsContractorPerson = [
-  body('owner_id')
+  body('owner')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Owner ID must be a positive integer'),
+    .isLength({ max: 200 })
+    .withMessage('Owner name must not exceed 200 characters')
+    .trim(),
   body('property_id')
     .optional()
     .isInt({ min: 1 })
@@ -14,14 +15,21 @@ const validateCreateContractsContractorPerson = [
     .optional()
     .isInt({ min: 1 })
     .withMessage('Category ID must be a positive integer'),
-  body('contact_id')
+  body('contact')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Contact ID must be a positive integer'),
-  body('contractor_id')
+    .isLength({ max: 20 })
+    .withMessage('Contact must not exceed 20 characters')
+    .trim(),
+  body('contractor')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Contractor ID must be a positive integer'),
+    .isLength({ max: 200 })
+    .withMessage('Contractor name must not exceed 200 characters')
+    .trim(),
+  body('contracter_img')
+    .optional()
+    .isURL()
+    .withMessage('Contractor image must be a valid URL')
+    .trim(),
   body('company_id')
     .optional()
     .isInt({ min: 1 })
@@ -44,10 +52,11 @@ const validateUpdateContractsContractorPerson = [
     .withMessage('Contracts Contractor person ID is required')
     .isInt({ min: 1 })
     .withMessage('Contracts Contractor person ID must be a positive integer'),
-  body('owner_id')
+  body('owner')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Owner ID must be a positive integer'),
+    .isLength({ max: 200 })
+    .withMessage('Owner name must not exceed 200 characters')
+    .trim(),
   body('property_id')
     .optional()
     .isInt({ min: 1 })
@@ -56,14 +65,21 @@ const validateUpdateContractsContractorPerson = [
     .optional()
     .isInt({ min: 1 })
     .withMessage('Category ID must be a positive integer'),
-  body('contact_id')
+  body('contact')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Contact ID must be a positive integer'),
-  body('contractor_id')
+    .isLength({ max: 20 })
+    .withMessage('Contact must not exceed 20 characters')
+    .trim(),
+  body('contractor')
     .optional()
-    .isInt({ min: 1 })
-    .withMessage('Contractor ID must be a positive integer'),
+    .isLength({ max: 200 })
+    .withMessage('Contractor name must not exceed 200 characters')
+    .trim(),
+  body('contracter_img')
+    .optional()
+    .isURL()
+    .withMessage('Contractor image must be a valid URL')
+    .trim(),
   body('company_id')
     .optional()
     .isInt({ min: 1 })
