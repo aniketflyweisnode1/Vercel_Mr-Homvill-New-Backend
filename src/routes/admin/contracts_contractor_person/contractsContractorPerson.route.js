@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   createContractsContractorPerson,
   getAllContractsContractorPersons,
+  getAllContractsContractorPersonsByQuery,
   getContractsContractorPersonById,
   getContractsContractorPersonByAuth,
   updateContractsContractorPerson,
@@ -20,7 +21,10 @@ const {
 router.post('/create', auth, validateCreateContractsContractorPerson, handleValidationErrors, createContractsContractorPerson);
 
 // Get all contracts contractor persons
-router.get('/getall', auth, getAllContractsContractorPersons);
+router.get('/getall',  getAllContractsContractorPersons);
+
+// Get all contracts contractor persons by query (filter by property_id, category_id, company_id)
+router.get('/getallbyquery', getAllContractsContractorPersonsByQuery);
 
 // Get contracts contractor person by ID
 router.get('/getbyid/:id', auth, getContractsContractorPersonById);

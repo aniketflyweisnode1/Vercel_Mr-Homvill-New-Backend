@@ -5,6 +5,7 @@ const {
   getAllContractsCompanies,
   getContractsCompanyById,
   getContractsCompanyByAuth,
+  getContractsCompaniesByCategoryId,
   updateContractsCompany,
   deleteContractsCompany,
   softDeleteContractsCompany
@@ -20,13 +21,16 @@ const {
 router.post('/create', auth, validateCreateContractsCompany, handleValidationErrors, createContractsCompany);
 
 // Get all contracts companies
-router.get('/getall', auth, getAllContractsCompanies);
+router.get('/getall', getAllContractsCompanies);
 
 // Get contracts company by ID
 router.get('/getbyid/:id', auth, getContractsCompanyById);
 
 // Get contracts company by auth (for authenticated user)
 router.get('/getbyauth', auth, getContractsCompanyByAuth);
+
+// Get contracts companies by category ID
+router.get('/getbycategoryid/:category_id', getContractsCompaniesByCategoryId);
 
 // Update contracts company
 router.put('/update', auth, validateUpdateContractsCompany, handleValidationErrors, updateContractsCompany);

@@ -2,6 +2,10 @@ const { body, validationResult } = require('express-validator');
 
 // Validation rules for creating contracts company
 const validateCreateContractsCompany = [
+  body('contracts_category_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contracts Category ID must be a positive integer'),
   body('Contracts_Company_name')
     .notEmpty()
     .withMessage('Contracts Company name is required')
@@ -17,6 +21,10 @@ const validateUpdateContractsCompany = [
     .withMessage('Contracts Company ID is required')
     .isInt({ min: 1 })
     .withMessage('Contracts Company ID must be a positive integer'),
+  body('contracts_category_id')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Contracts Category ID must be a positive integer'),
   body('Contracts_Company_name')
     .optional()
     .isLength({ min: 2, max: 100 })

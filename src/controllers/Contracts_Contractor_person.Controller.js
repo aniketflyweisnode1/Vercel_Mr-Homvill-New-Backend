@@ -425,9 +425,120 @@ const softDeleteContractsContractorPerson = async (req, res) => {
   }
 };
 
+// Get All Contracts Contractor Persons by Query (Filter by property_id, category_id, company_id)
+const getAllContractsContractorPersonsByQuery = async (req, res) => {
+  try {
+    const { property_id, category_id, company_id } = req.query;
+    
+    // Build query object
+    const query = { Status: true };
+    
+    // Add filters if provided
+    if (property_id) {
+      query.property_id = parseInt(property_id);
+    }
+    if (category_id) {
+      query.category_id = parseInt(category_id);
+    }
+    if (company_id) {
+      query.company_id = parseInt(company_id);
+    }
+
+    const contractorPersons = await Contracts_Contractor_person.find(query)
+      .sort({ CreateAt: -1 });
+
+    const contractorPersonsResponse = await Promise.all(contractorPersons.map(async (contractorPerson) => {
+      const [createByUser, updatedByUser, category, property, company] = await Promise.all([
+        contractorPerson.CreateBy ? User.findOne({ user_id: contractorPerson.CreateBy }) : null,
+        contractorPerson.UpdatedBy ? User.findOne({ user_id: contractorPerson.UpdatedBy }) : null,
+        contractorPerson.category_id ? Contracts_Category.findOne({ Contracts_Category_id: contractorPerson.category_id }) : null,
+        contractorPerson.property_id ? Properties.findOne({ Properties_id: contractorPerson.property_id }) : null,
+        contractorPerson.company_id ? Contracts_Company.findOne({ Contracts_Company_id: contractorPerson.company_id }) : null
+      ]);
+
+      const contractorPersonObj = contractorPerson.toObject();
+      contractorPersonObj.CreateBy = createByUser ? { 
+        user_id: createByUser.user_id, 
+        Name: createByUser.Name, 
+        email: createByUser.email 
+      } : null;
+      contractorPersonObj.UpdatedBy = updatedByUser ? { 
+        user_id: updatedByUser.user_id, 
+        Name: updatedByUser.Name, 
+        email: updatedByUser.email 
+      } : null;
+      contractorPersonObj.category_id = category ? { 
+        Contracts_Category_id: category.Contracts_Category_id, 
+        Contracts_Category_name: category.Contracts_Category_name 
+      } : null;
+      contractorPersonObj.property_id = property ? {
+        Properties_id: property.Properties_id,
+        Properties_Status_id: property.Properties_Status_id,
+        Properties_Category_id: property.Properties_Category_id,
+        Properties_for: property.Properties_for,
+        Owner_Fist_name: property.Owner_Fist_name,
+        Owner_Last_name: property.Owner_Last_name,
+        Owner_phone_no: property.Owner_phone_no,
+        Owner_email: property.Owner_email,
+        Property_cost: property.Property_cost,
+        Property_year_build: property.Property_year_build,
+        Property_Plot_size: property.Property_Plot_size,
+        Property_finished_Sq_ft: property.Property_finished_Sq_ft,
+        Property_Bed_rooms: property.Property_Bed_rooms,
+        Property_Full_Baths: property.Property_Full_Baths,
+        Property_OneTwo_Baths: property.Property_OneTwo_Baths,
+        Property_Address: property.Property_Address,
+        Property_city: property.Property_city,
+        Property_zip: property.Property_zip,
+        Property_country: property.Property_country,
+        Property_state: property.Property_state,
+        Property_Why_sell: property.Property_Why_sell,
+        Property_Reason_Selling: property.Property_Reason_Selling,
+        Property_Listing_Price: property.Property_Listing_Price,
+        Property_Listing_plot_size: property.Property_Listing_plot_size,
+        Property_Listing_Description: property.Property_Listing_Description,
+        Property_photos: property.Property_photos,
+        Appliances: property.Appliances,
+        floors: property.floors,
+        others: property.others,
+        parking: property.parking,
+        Rooms: property.Rooms,
+        Status: property.Status,
+        CreateBy: property.CreateBy,
+        CreateAt: property.CreateAt,
+        UpdatedBy: property.UpdatedBy,
+        UpdatedAt: property.UpdatedAt
+      } : null;
+      contractorPersonObj.company_id = company ? { 
+        Contracts_Company_id: company.Contracts_Company_id, 
+        Contracts_Company_name: company.Contracts_Company_name 
+      } : null;
+      return contractorPersonObj;
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: contractorPersonsResponse.length,
+      filters: {
+        property_id: property_id || null,
+        category_id: category_id || null,
+        company_id: company_id || null
+      },
+      data: contractorPersonsResponse
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching contracts contractor persons by query',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createContractsContractorPerson,
   getAllContractsContractorPersons,
+  getAllContractsContractorPersonsByQuery,
   getContractsContractorPersonById,
   getContractsContractorPersonByAuth,
   updateContractsContractorPerson,

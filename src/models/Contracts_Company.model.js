@@ -7,6 +7,11 @@ const contractsCompanySchema = new mongoose.Schema({
     unique: true,
     auto: true
   },
+  contracts_category_id: {
+    type: Number,
+    ref: 'Contracts_Category',
+    default: null
+  },
   Contracts_Company_name: {
     type: String,
     required: true,
