@@ -1,6 +1,7 @@
 const Properties = require('../models/Properties.model');
 const Properties_Status = require('../models/Properties_Status.model');
 const Properties_Category = require('../models/Properties_Category.model');
+const Payment_mode = require('../models/Payment_mode.model');
 const User = require('../models/User.model');
 
 // Create Properties
@@ -35,6 +36,7 @@ const createProperties = async (req, res) => {
       Appliances,
       floors,
       others,
+      payment_methods,
       parking,
       Rooms
     } = req.body;
@@ -90,6 +92,7 @@ const createProperties = async (req, res) => {
       Appliances: Appliances || [],
       floors: floors || [],
       others: others || [],
+      payment_methods: payment_methods || [],
       parking: parking || [],
       Rooms: Rooms || [],
       CreateBy: req.user?.user_id || null
@@ -104,6 +107,11 @@ const createProperties = async (req, res) => {
       savedProperties.CreateBy ? User.findOne({ user_id: savedProperties.CreateBy }) : null
     ]);
 
+    // Fetch payment methods data
+    const paymentMethodsData = savedProperties.payment_methods && savedProperties.payment_methods.length > 0 
+      ? await Payment_mode.find({ Payment_mode_id: { $in: savedProperties.payment_methods } })
+      : [];
+
     const response = savedProperties.toObject();
     response.Properties_Status_id = statusData ? { 
       Properties_Status_id: statusData.Properties_Status_id, 
@@ -113,6 +121,10 @@ const createProperties = async (req, res) => {
       Properties_Category_id: categoryData.Properties_Category_id, 
       name: categoryData.name 
     } : null;
+    response.payment_methods = paymentMethodsData.map(payment => ({
+      Payment_mode_id: payment.Payment_mode_id,
+      name: payment.name
+    }));
     response.CreateBy = createByUser ? { 
       user_id: createByUser.user_id, 
       Name: createByUser.Name, 
@@ -206,6 +218,11 @@ const getPropertiesById = async (req, res) => {
       property.UpdatedBy ? User.findOne({ user_id: property.UpdatedBy }) : null
     ]);
 
+    // Fetch payment methods data
+    const paymentMethodsData = property.payment_methods && property.payment_methods.length > 0 
+      ? await Payment_mode.find({ Payment_mode_id: { $in: property.payment_methods } })
+      : [];
+
     const response = property.toObject();
     response.Properties_Status_id = statusData ? { 
       Properties_Status_id: statusData.Properties_Status_id, 
@@ -215,6 +232,10 @@ const getPropertiesById = async (req, res) => {
       Properties_Category_id: categoryData.Properties_Category_id, 
       name: categoryData.name 
     } : null;
+    response.payment_methods = paymentMethodsData.map(payment => ({
+      Payment_mode_id: payment.Payment_mode_id,
+      name: payment.name
+    }));
     response.CreateBy = createByUser ? { 
       user_id: createByUser.user_id, 
       Name: createByUser.Name, 
@@ -312,6 +333,11 @@ const updateProperties = async (req, res) => {
       updatedProperty.UpdatedBy ? User.findOne({ user_id: updatedProperty.UpdatedBy }) : null
     ]);
 
+    // Fetch payment methods data
+    const paymentMethodsData = updatedProperty.payment_methods && updatedProperty.payment_methods.length > 0 
+      ? await Payment_mode.find({ Payment_mode_id: { $in: updatedProperty.payment_methods } })
+      : [];
+
     const response = updatedProperty.toObject();
     response.Properties_Status_id = statusData ? { 
       Properties_Status_id: statusData.Properties_Status_id, 
@@ -321,6 +347,10 @@ const updateProperties = async (req, res) => {
       Properties_Category_id: categoryData.Properties_Category_id, 
       name: categoryData.name 
     } : null;
+    response.payment_methods = paymentMethodsData.map(payment => ({
+      Payment_mode_id: payment.Payment_mode_id,
+      name: payment.name
+    }));
     response.CreateBy = createByUser ? { 
       user_id: createByUser.user_id, 
       Name: createByUser.Name, 

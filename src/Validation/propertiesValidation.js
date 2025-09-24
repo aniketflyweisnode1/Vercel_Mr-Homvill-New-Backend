@@ -137,6 +137,14 @@ const validateCreateProperties = [
     .optional()
     .isArray()
     .withMessage('Others must be an array'),
+  body('payment_methods')
+    .optional()
+    .isArray()
+    .withMessage('Payment methods must be an array'),
+  body('payment_methods.*')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Each payment method must be a positive integer'),
   body('parking')
     .optional()
     .isArray()
@@ -269,6 +277,14 @@ const validateUpdateProperties = [
     .optional()
     .isArray()
     .withMessage('Others must be an array'),
+  body('payment_methods')
+    .optional()
+    .isArray()
+    .withMessage('Payment methods must be an array'),
+  body('payment_methods.*')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('Each payment method must be a positive integer'),
   body('parking')
     .optional()
     .isArray()

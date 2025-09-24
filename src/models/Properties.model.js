@@ -80,22 +80,18 @@ const propertiesSchema = new mongoose.Schema({
   },
   Property_city: {
     type: String,
-    required: true,
     trim: true
   },
   Property_zip: {
     type: String,
-    required: true,
     trim: true
   },
   Property_country: {
     type: String,
-    required: true,
     trim: true
   },
   Property_state: {
     type: String,
-    required: true,
     trim: true
   },
   Property_Why_sell: {
@@ -143,6 +139,10 @@ const propertiesSchema = new mongoose.Schema({
   others: [{
     type: String,
     trim: true
+  }],
+  payment_methods: [{
+    type: Number,
+    ref: 'Payment_mode'
   }],
   parking: [{
     type: String,
