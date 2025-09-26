@@ -99,11 +99,10 @@ const propertiesSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  Property_Reason_Selling: {
+  Property_Reason_Selling: [{
     type: String,
-    required: true,
     trim: true
-  },
+  }],
   Property_Listing_Price: {
     type: Number,
     required: true

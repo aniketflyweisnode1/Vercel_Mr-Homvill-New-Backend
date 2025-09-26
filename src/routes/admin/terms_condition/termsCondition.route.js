@@ -4,7 +4,8 @@ const {
   createTermsCondition,
   getAllTermsConditions,
   getTermsConditionById,
-  updateTermsCondition
+  updateTermsCondition,
+  deleteTermsCondition
 } = require('../../../controllers/terms_Condition.Controller.js');
 const { auth } = require('../../../middleware/authMiddleware.js');
 
@@ -19,5 +20,8 @@ router.get('/getbyid/:id', auth, getTermsConditionById);
 
 // Update (auth)
 router.put('/update', auth, updateTermsCondition);
+
+// Delete (auth)
+router.delete('/delete/:id', auth, deleteTermsCondition);
 
 module.exports = router;

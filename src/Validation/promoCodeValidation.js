@@ -35,6 +35,35 @@ const validateUpdatePromoCode = [
   body('Status').optional().isBoolean()
 ];
 
+// Validation for extending promo code expiry date
+const validateExtendPromoCodeExpiry = [
+  body('id')
+    .notEmpty()
+    .withMessage('Promo Code ID is required')
+    .isInt({ min: 1 })
+    .withMessage('Promo Code ID must be a positive integer'),
+  body('newEndDate')
+    .notEmpty()
+    .withMessage('New end date is required')
+    .isISO8601()
+    .withMessage('New end date must be a valid date')
+    .toDate()
+    .custom((value) => {
+      if (new Date(value) <= new Date()) {
+        throw new Error('New end date must be in the future');
+      }
+      return true;
+    }),
+  body('newEndTime')
+    .notEmpty()
+    .withMessage('New end time is required')
+    .isString()
+    .withMessage('New end time must be a string')
+    .trim()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage('New end time must be in HH:MM format')
+];
+
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -46,6 +75,7 @@ const handleValidationErrors = (req, res, next) => {
 module.exports = {
   validateCreatePromoCode,
   validateUpdatePromoCode,
+  validateExtendPromoCodeExpiry,
   handleValidationErrors
 };
 

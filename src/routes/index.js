@@ -63,6 +63,7 @@ const documentPreferencesRoutes = require('./user/document_preferences/documentP
 const propertyCategoryRoutes = require('./admin/property_category/propertyCategory.route.js');
 const fileUploadRoutes = require('./admin/fileUpload/fileUpload.route.js');
 const smsRoutes = require('./admin/sms/sms.route.js');
+const subAdminPermissionRoutes = require('./admin/subadmin_permission/subAdminPermission.route.js');
 
 
 // Use routes
@@ -127,5 +128,6 @@ router.use('/document-preferences', documentPreferencesRoutes);
 router.use('/property-category', propertyCategoryRoutes);
 router.use('/file-upload', fileUploadRoutes);
 router.use('/sms', smsRoutes);
+router.use('/subadmin-permission', subAdminPermissionRoutes);
 
 module.exports = router;

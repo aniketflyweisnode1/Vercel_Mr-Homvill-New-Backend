@@ -511,12 +511,125 @@ const deactivateUser = async (req, res) => {
   }
 };
 
+// Get Users by Role
+const getUserByRole = async (req, res) => {
+  try {
+    const { role_id } = req.params;
+    const { page = 1, limit = 10, status = 'active' } = req.query;
+    
+    // Validate role_id
+    if (!role_id || isNaN(parseInt(role_id))) {
+      return res.status(400).json({
+        success: false,
+        message: 'Valid role ID is required'
+      });
+    }
+
+    // Build query
+    const query = { Role_id: parseInt(role_id) };
+    if (status === 'active') {
+      query.Status = true;
+    } else if (status === 'inactive') {
+      query.Status = false;
+    }
+    // If status is 'all', don't add Status filter
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Get users with pagination
+    const [users, totalCount] = await Promise.all([
+      User.find(query)
+        .sort({ CreateAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit)),
+      User.countDocuments(query)
+    ]);
+
+    // Manually fetch related data for all users
+    const usersResponse = await Promise.all(users.map(async (user) => {
+      const [responsibility, role, userCategory, language, country, state, city, createByUser] = await Promise.all([
+        Responsibility.findOne({ Responsibility_id: user.Responsibility_id }),
+        Role.findOne({ Role_id: user.Role_id }),
+        user.User_Category_id ? User_Category.findOne({ User_Category_id: user.User_Category_id }) : null,
+        Language.findOne({ Language_id: user.Language_id }),
+        Country.findOne({ Country_id: user.Country_id }),
+        State.findOne({ State_id: user.State_id }),
+        City.findOne({ City_id: user.City_id }),
+        user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null
+      ]);
+
+      const userObj = user.toObject();
+      userObj.Responsibility_id = responsibility ? { 
+        Responsibility_id: responsibility.Responsibility_id, 
+        Responsibility_name: responsibility.Responsibility_name 
+      } : null;
+      userObj.Role_id = role ? { 
+        Role_id: role.Role_id, 
+        role_name: role.role_name 
+      } : null;
+      userObj.User_Category_id = userCategory ? { 
+        User_Category_id: userCategory.User_Category_id, 
+        Category_name: userCategory.Category_name 
+      } : null;
+      userObj.Language_id = language ? { 
+        Language_id: language.Language_id, 
+        Language_name: language.Language_name 
+      } : null;
+      userObj.Country_id = country ? { 
+        Country_id: country.Country_id, 
+        Country_name: country.Country_name, 
+        code: country.code 
+      } : null;
+      userObj.State_id = state ? { 
+        State_id: state.State_id, 
+        state_name: state.state_name, 
+        Code: state.Code 
+      } : null;
+      userObj.City_id = city ? { 
+        City_id: city.City_id, 
+        City_name: city.City_name, 
+        Code: city.Code 
+      } : null;
+      userObj.CreateBy = createByUser ? { 
+        user_id: createByUser.user_id, 
+        Name: createByUser.Name, 
+        email: createByUser.email 
+      } : null;
+
+      // Remove sensitive information
+      delete userObj.password;
+      return userObj;
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: usersResponse.length,
+      totalCount: totalCount,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalCount / parseInt(limit)),
+      filters: {
+        role_id: parseInt(role_id),
+        status: status
+      },
+      data: usersResponse
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching users by role',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createUser,
   updateUser,
   getUserById,
   getAllUsers,
   getUserByAuth,
+  getUserByRole,
   deleteUser,
   softDeleteUser,
   logout,

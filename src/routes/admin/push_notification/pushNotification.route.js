@@ -4,7 +4,8 @@ const {
   createPushNotification,
   getAllPushNotifications,
   getPushNotificationById,
-  updatePushNotification
+  updatePushNotification,
+  deletePushNotification
 } = require('../../../controllers/Push_Notification.Controller.js');
 const { auth } = require('../../../middleware/authMiddleware.js');
 
@@ -19,5 +20,8 @@ router.get('/getbyid/:id', auth, getPushNotificationById);
 
 // Update (auth)
 router.put('/update', auth, updatePushNotification);
+
+// Delete (auth)
+router.delete('/delete/:id', auth, deletePushNotification);
 
 module.exports = router;

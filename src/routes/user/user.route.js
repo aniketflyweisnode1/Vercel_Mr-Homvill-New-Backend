@@ -8,6 +8,7 @@ const {
   deleteUser,
   softDeleteUser,
   getUserByAuth,
+  getUserByRole,
   logout,
   activateUser,
   deactivateUser
@@ -50,6 +51,9 @@ router.get('/getbyid/:id', auth, getUserById);
 
 // Get user by auth (current logged in user)
 router.get('/getbyauth', auth, getUserByAuth);
+
+// Get users by role
+router.get('/getbyrole/:role_id', auth, getUserByRole);
 
 // Update user
 router.put('/update', auth, validateUpdateUser, handleValidationErrors, updateUser);

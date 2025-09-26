@@ -110,9 +110,43 @@ const updatePrivacyPolicy = async (req, res) => {
   }
 };
 
+// Delete (auth)
+const deletePrivacyPolicy = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.user_id;
+    
+    const item = await Privacy_policy.findOne({ Privacy_policy_id: parseInt(id) });
+    if (!item) {
+      return res.status(404).json({ success: false, message: 'Privacy Policy not found' });
+    }
+
+    // Soft delete by setting Status to false
+    item.Status = false;
+    item.UpdatedBy = userId;
+    item.UpdatedAt = new Date();
+    
+    const deleted = await item.save();
+
+    const [createByUser, updatedByUser] = await Promise.all([
+      deleted.CreateBy ? User.findOne({ user_id: deleted.CreateBy }) : null,
+      deleted.UpdatedBy ? User.findOne({ user_id: deleted.UpdatedBy }) : null
+    ]);
+
+    const response = deleted.toObject();
+    response.CreateBy = createByUser ? { user_id: createByUser.user_id, Name: createByUser.Name, email: createByUser.email } : null;
+    response.UpdatedBy = updatedByUser ? { user_id: updatedByUser.user_id, Name: updatedByUser.Name, email: updatedByUser.email } : null;
+
+    res.status(200).json({ success: true, message: 'Privacy Policy deleted successfully', data: response });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error deleting privacy policy', error: error.message });
+  }
+};
+
 module.exports = {
   createPrivacyPolicy,
   getAllPrivacyPolicies,
   getPrivacyPolicyById,
-  updatePrivacyPolicy
+  updatePrivacyPolicy,
+  deletePrivacyPolicy
 };

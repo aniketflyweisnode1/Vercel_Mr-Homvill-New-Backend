@@ -4,7 +4,8 @@ const {
   createPrivacyPolicy,
   getAllPrivacyPolicies,
   getPrivacyPolicyById,
-  updatePrivacyPolicy
+  updatePrivacyPolicy,
+  deletePrivacyPolicy
 } = require('../../../controllers/Privacy_policy.Controller.js');
 const { auth } = require('../../../middleware/authMiddleware.js');
 
@@ -19,5 +20,8 @@ router.get('/getbyid/:id', auth, getPrivacyPolicyById);
 
 // Update (auth)
 router.put('/update', auth, updatePrivacyPolicy);
+
+// Delete (auth)
+router.delete('/delete/:id', auth, deletePrivacyPolicy);
 
 module.exports = router;

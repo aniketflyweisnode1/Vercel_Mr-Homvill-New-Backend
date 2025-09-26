@@ -84,7 +84,7 @@ const createProperties = async (req, res) => {
       Property_country,
       Property_state,
       Property_Why_sell,
-      Property_Reason_Selling,
+      Property_Reason_Selling: Property_Reason_Selling || [],
       Property_Listing_Price,
       Property_Listing_plot_size,
       Property_Listing_Description,

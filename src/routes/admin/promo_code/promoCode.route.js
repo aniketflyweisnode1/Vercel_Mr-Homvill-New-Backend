@@ -4,12 +4,15 @@ const {
   createPromoCode,
   getAllPromoCodes,
   getPromoCodeById,
-  updatePromoCode
+  updatePromoCode,
+  extendPromoCodeExpiry,
+  deletePromoCode
 } = require('../../../controllers/Promo_Code.Controller.js');
 const { auth } = require('../../../middleware/authMiddleware.js');
 const {
   validateCreatePromoCode,
   validateUpdatePromoCode,
+  validateExtendPromoCodeExpiry,
   handleValidationErrors
 } = require('../../../Validation/promoCodeValidation.js');
 
@@ -24,6 +27,12 @@ router.get('/getbyid/:id', auth, getPromoCodeById);
 
 // Update (auth)
 router.put('/update', auth, validateUpdatePromoCode, handleValidationErrors, updatePromoCode);
+
+// Extend expiry date (auth)
+router.put('/extend-expiry', auth, validateExtendPromoCodeExpiry, handleValidationErrors, extendPromoCodeExpiry);
+
+// Delete (auth)
+router.delete('/delete/:id', auth, deletePromoCode);
 
 module.exports = router;
 

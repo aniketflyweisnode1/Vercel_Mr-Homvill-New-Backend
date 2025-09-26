@@ -4,7 +4,8 @@ const {
   createFaq,
   getAllFaqs,
   getFaqById,
-  updateFaq
+  updateFaq,
+  deleteFaq
 } = require('../../../controllers/faq.Controller.js');
 const { auth } = require('../../../middleware/authMiddleware.js');
 
@@ -19,5 +20,8 @@ router.get('/getbyid/:id', auth, getFaqById);
 
 // Update (auth)
 router.put('/update', auth, updateFaq);
+
+// Delete (auth)
+router.delete('/delete/:id', auth, deleteFaq);
 
 module.exports = router;
