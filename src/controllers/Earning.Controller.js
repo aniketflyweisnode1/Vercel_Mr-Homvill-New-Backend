@@ -72,7 +72,7 @@ const getAllEarnings = async (req, res) => {
       obj.UpdatedBy = updatedByUser ? { user_id: updatedByUser.user_id, Name: updatedByUser.Name, email: updatedByUser.email } : null;
       obj.seller = sellerU ? { user_id: sellerU.user_id, Name: sellerU.Name, email: sellerU.email, phone: sellerU.phone } : null;
       obj.Buyer = buyerU ? { user_id: buyerU.user_id, Name: buyerU.Name, email: buyerU.email, phone: buyerU.phone } : null;
-      response.Property_id = prop ? { Properties_id: prop.Properties_id, Property_city: prop.Property_city, Property_image: prop.Property_photos, Property_zip: prop.Property_zip, Property_country: prop.Property_country, Property_state: prop.Property_state, payment_methods: prop.payment_methods } : null;
+      obj.Property_id = prop ? { Properties_id: prop.Properties_id, Property_city: prop.Property_city, Property_image: prop.Property_photos, Property_zip: prop.Property_zip, Property_country: prop.Property_country, Property_state: prop.Property_state, payment_methods: prop.payment_methods } : null;
       obj.Transaction_id = tx ? { Transaction_id: tx.Transaction_id, Amount: tx.Amount } : null;
       return obj;
     }));
