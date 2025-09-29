@@ -9,7 +9,6 @@ const propertiesStatusSchema = new mongoose.Schema({
   },
   Pro_Status: {
     type: String,
-    enum: ['SALE', 'RENT'],
     required: true
   },
   Status: {
