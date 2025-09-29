@@ -5,8 +5,7 @@ const validateCreatePropertiesStatus = [
   body('Pro_Status')
     .notEmpty()
     .withMessage('Pro_Status is required')
-    .isIn(['SALE', 'RENT'])
-    .withMessage('Pro_Status must be either SALE or RENT')
+    .withMessage('Pro_Status must be either string')
 ];
 
 // Validation rules for updating properties status
@@ -18,8 +17,7 @@ const validateUpdatePropertiesStatus = [
     .withMessage('Properties Status ID must be a positive integer'),
   body('Pro_Status')
     .optional()
-    .isIn(['SALE', 'RENT'])
-    .withMessage('Pro_Status must be either SALE or RENT')
+    .withMessage('Pro_Status must be either string')
 ];
 
 // Middleware to handle validation errors
