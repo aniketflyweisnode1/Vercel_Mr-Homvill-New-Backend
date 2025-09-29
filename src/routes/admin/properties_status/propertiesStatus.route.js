@@ -17,7 +17,7 @@ const {
 } = require('../../../Validation/propertiesStatusValidation.js');
 
 // Create a new properties status
-router.post('/create', auth, validateCreatePropertiesStatus, handleValidationErrors, createPropertiesStatus);
+router.post('/create', auth, createPropertiesStatus);
 
 // Get all properties statuses
 router.get('/getall', auth, getAllPropertiesStatus);
