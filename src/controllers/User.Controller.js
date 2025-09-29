@@ -119,6 +119,14 @@ const createUser = async (req, res) => {
       data: userResponse
     });
   } catch (error) {
+    // Handle duplicate email error
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this email'
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: 'Error creating user',
@@ -198,6 +206,14 @@ const updateUser = async (req, res) => {
       data: userResponse
     });
   } catch (error) {
+    // Handle duplicate email error
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this email'
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: 'Error updating user',
