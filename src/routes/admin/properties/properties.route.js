@@ -19,7 +19,7 @@ const {
 router.post('/create', auth, validateCreateProperties, handleValidationErrors, createProperties);
 
 // Get all properties
-router.get('/getall', auth, getAllProperties);
+router.get('/getall', getAllProperties);
 
 // Get properties by ID
 router.get('/getbyid/:id', auth, getPropertiesById);
