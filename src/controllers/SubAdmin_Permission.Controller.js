@@ -7,7 +7,7 @@ const createSubAdminPermission = async (req, res) => {
     const userId = req.user.user_id;
     const {
       user_id,
-      User,
+      User: UserPermissions,
       Properties,
       Contracts,
       Subscription,
@@ -35,7 +35,7 @@ const createSubAdminPermission = async (req, res) => {
 
     const subAdminPermission = new SubAdmin_Permission({
       user_id: parseInt(user_id),
-      User: User || [{ Edit: false, View: false }],
+      User: UserPermissions || [{ Edit: false, View: false }],
       Properties: Properties || [{ Edit: false, View: false }],
       Contracts: Contracts || [{ Edit: false, View: false }],
       Subscription: Subscription || [{ Edit: false, View: false }],
