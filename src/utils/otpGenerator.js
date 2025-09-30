@@ -4,8 +4,14 @@
  */
 const generateOTP = () => {
   // Generate a random 8-digit number
-  const otp = Math.floor(10000000 + Math.random() * 90000000);
-  return otp.toString();
+  const digits = '0123456789';
+  let otp = '';
+  
+  for (let i = 0; i < 6; i++) {
+    otp += digits[Math.floor(Math.random() * digits.length)];
+  }
+  
+  return otp;
 };
 
 /**
@@ -13,7 +19,7 @@ const generateOTP = () => {
  * @param {number} length - Length of OTP (default: 8)
  * @returns {string} OTP string
  */
-const generateCustomOTP = (length = 8) => {
+const generateCustomOTP = (length = 6) => {
   const digits = '0123456789';
   let otp = '';
   
