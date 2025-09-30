@@ -49,6 +49,7 @@ const sendForgetPasswordOTPController = async (req, res) => {
       console.error('Email sending error:', emailError);
       res.status(500).json({
         success: false,
+        OTP : otp,
         message: 'Failed to send OTP email. Please try again.'
       });
     }
