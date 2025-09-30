@@ -357,7 +357,7 @@ const getUserByAuth = async (req, res) => {
     userResponse.UpdatedBy = updatedByUser ? { user_id: updatedByUser.user_id, Name: updatedByUser.Name, email: updatedByUser.email } : null;
 
     // Remove password from response
-    delete userResponse.password;
+    // delete userResponse.password;
 
     res.status(200).json({
       success: true,
