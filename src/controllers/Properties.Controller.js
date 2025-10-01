@@ -38,7 +38,17 @@ const createProperties = async (req, res) => {
       others,
       payment_methods,
       parking,
-      Rooms
+      Rooms,
+      i_am_able_negotiate_on_Commision,
+      commission_percentage,
+      i_will_work_with_agent,
+      i_am_only_willing_to_Directly,
+      sub_Role,
+      Buyers_Credit_Refund,
+      open_house_Start_date,
+      open_house_End_date,
+      open_house_Time,
+      Video_tour_link
     } = req.body;
 
     // Check if Properties_Status exists
@@ -95,6 +105,16 @@ const createProperties = async (req, res) => {
       payment_methods: payment_methods || [],
       parking: parking || [],
       Rooms: Rooms || [],
+      i_am_able_negotiate_on_Commision: i_am_able_negotiate_on_Commision || false,
+      commission_percentage: commission_percentage || 0,
+      i_will_work_with_agent: i_will_work_with_agent || false,
+      i_am_only_willing_to_Directly: i_am_only_willing_to_Directly || false,
+      sub_Role: sub_Role || 'owner',
+      Buyers_Credit_Refund: Buyers_Credit_Refund || 'Yes',
+      open_house_Start_date: open_house_Start_date || null,
+      open_house_End_date: open_house_End_date || null,
+      open_house_Time: open_house_Time || null,
+      Video_tour_link: Video_tour_link || [],
       CreateBy: req.user?.user_id || null
     });
 

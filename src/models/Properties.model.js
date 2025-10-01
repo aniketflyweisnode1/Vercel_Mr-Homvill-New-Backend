@@ -151,6 +151,49 @@ const propertiesSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
+  i_am_able_negotiate_on_Commision: {
+    type: Boolean,
+    default: false
+  },
+  commission_percentage: {
+    type: Number,
+    default: 0
+  },
+  i_will_work_with_agent: {
+    type: Boolean,
+    default: false
+  },
+  i_am_only_willing_to_Directly: {
+    type: Boolean,
+    default: false
+  },
+  sub_Role: {
+    type: String,
+    default: 'owner',
+    trim: true
+  },
+  Buyers_Credit_Refund: {
+    type: String,
+    enum: ['Yes', 'NO'],
+    default: 'Yes'
+  },
+  open_house_Start_date: {
+    type: Date,
+    default: null
+  },
+  open_house_End_date: {
+    type: Date,
+    default: null
+  },
+  open_house_Time: {
+    type: String,
+    default: null,
+    trim: true
+  },
+  Video_tour_link: [{
+    type: String,
+    trim: true
+  }],
   Status: {
     type: Boolean,
     default: true
