@@ -6,6 +6,7 @@ const Language = require('../models/Language.model');
 const Country = require('../models/Country.model');
 const State = require('../models/State.model');
 const City = require('../models/City.model');
+const User_Address = require('../models/User_Address.model');
 const { generateEmployeeId } = require('../utils/employeeIdGenerator');
 
 // Create User
@@ -44,6 +45,24 @@ const createUser = async (req, res) => {
       Status
     } = req.body;
     
+
+    // Check if user with same email already exists
+    const existingUserByEmail = await User.findOne({ email: email });
+    if (existingUserByEmail) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this email'
+      });
+    }
+
+    // Check if user with same phone number already exists
+    const existingUserByPhone = await User.findOne({ phone: phone });
+    if (existingUserByPhone) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this phone number'
+      });
+    }
 
     // Generate unique employee ID
     const Employee_id = await generateEmployeeId();
@@ -127,6 +146,14 @@ const createUser = async (req, res) => {
       });
     }
     
+    // Handle duplicate phone error
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this phone number'
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: 'Error creating user',
@@ -154,6 +181,34 @@ const updateUser = async (req, res) => {
         success: false,
         message: 'User not found'
       });
+    }
+
+    // Check for duplicate email if email is being updated
+    if (updateData.email && updateData.email !== user.email) {
+      const existingUserByEmail = await User.findOne({ 
+        email: updateData.email,
+        user_id: { $ne: parseInt(id) } // Exclude current user
+      });
+      if (existingUserByEmail) {
+        return res.status(400).json({
+          success: false,
+          message: 'User already registered with this email'
+        });
+      }
+    }
+
+    // Check for duplicate phone if phone is being updated
+    if (updateData.phone && updateData.phone !== user.phone) {
+      const existingUserByPhone = await User.findOne({ 
+        phone: updateData.phone,
+        user_id: { $ne: parseInt(id) } // Exclude current user
+      });
+      if (existingUserByPhone) {
+        return res.status(400).json({
+          success: false,
+          message: 'User already registered with this phone number'
+        });
+      }
     }
 
     // Update fields
@@ -214,6 +269,14 @@ const updateUser = async (req, res) => {
       });
     }
     
+    // Handle duplicate phone error
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this phone number'
+      });
+    }
+    
     res.status(500).json({
       success: false,
       message: 'Error updating user',
@@ -237,7 +300,7 @@ const getUserById = async (req, res) => {
     }
 
     // Manually fetch related data
-    const [responsibility, role, language, country, state, city, createByUser, updatedByUser] = await Promise.all([
+    const [responsibility, role, language, country, state, city, createByUser, updatedByUser, userAddresses] = await Promise.all([
       Responsibility.findOne({ Responsibility_id: user.Responsibility_id }),
       Role.findOne({ Role_id: user.Role_id }),
       Language.findOne({ Language_id: user.Language_id }),
@@ -245,7 +308,8 @@ const getUserById = async (req, res) => {
       State.findOne({ State_id: user.State_id }),
       City.findOne({ City_id: user.City_id }),
       user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null,
-      user.UpdatedBy ? User.findOne({ user_id: user.UpdatedBy }) : null
+      user.UpdatedBy ? User.findOne({ user_id: user.UpdatedBy }) : null,
+      User_Address.find({ user_id: user.user_id, Status: true }).sort({ is_default: -1, CreateAt: -1 })
     ]);
 
     // Create response object with populated data
@@ -258,6 +322,7 @@ const getUserById = async (req, res) => {
     userResponse.City_id = city ? { City_id: city.City_id, City_name: city.City_name, Code: city.Code } : null;
     userResponse.CreateBy = createByUser ? { user_id: createByUser.user_id, Name: createByUser.Name, email: createByUser.email } : null;
     userResponse.UpdatedBy = updatedByUser ? { user_id: updatedByUser.user_id, Name: updatedByUser.Name, email: updatedByUser.email } : null;
+    userResponse.addresses = userAddresses || [];
 
     // Remove password from response
     delete userResponse.password;
@@ -282,14 +347,15 @@ const getAllUsers = async (req, res) => {
 
     // Manually fetch related data for all users
     const usersResponse = await Promise.all(users.map(async (user) => {
-      const [responsibility, role, language, country, state, city, createByUser] = await Promise.all([
+      const [responsibility, role, language, country, state, city, createByUser, userAddresses] = await Promise.all([
         Responsibility.findOne({ Responsibility_id: user.Responsibility_id }),
         Role.findOne({ Role_id: user.Role_id }),
         Language.findOne({ Language_id: user.Language_id }),
         Country.findOne({ Country_id: user.Country_id }),
         State.findOne({ State_id: user.State_id }),
         City.findOne({ City_id: user.City_id }),
-        user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null
+        user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null,
+        User_Address.find({ user_id: user.user_id, Status: true }).sort({ is_default: -1, CreateAt: -1 })
       ]);
 
       const userObj = user.toObject();
@@ -300,6 +366,7 @@ const getAllUsers = async (req, res) => {
       userObj.State_id = state ? { State_id: state.State_id, state_name: state.state_name, Code: state.Code } : null;
       userObj.City_id = city ? { City_id: city.City_id, City_name: city.City_name, Code: city.Code } : null;
       userObj.CreateBy = createByUser ? { user_id: createByUser.user_id, Name: createByUser.Name, email: createByUser.email } : null;
+      userObj.addresses = userAddresses || [];
 
       delete userObj.password;
       return userObj;
@@ -334,7 +401,7 @@ const getUserByAuth = async (req, res) => {
     }
 
     // Manually fetch related data
-    const [responsibility, role, language, country, state, city, createByUser, updatedByUser] = await Promise.all([
+    const [responsibility, role, language, country, state, city, createByUser, updatedByUser, userAddresses] = await Promise.all([
       Responsibility.findOne({ Responsibility_id: user.Responsibility_id }),
       Role.findOne({ Role_id: user.Role_id }),
       Language.findOne({ Language_id: user.Language_id }),
@@ -342,7 +409,8 @@ const getUserByAuth = async (req, res) => {
       State.findOne({ State_id: user.State_id }),
       City.findOne({ City_id: user.City_id }),
       user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null,
-      user.UpdatedBy ? User.findOne({ user_id: user.UpdatedBy }) : null
+      user.UpdatedBy ? User.findOne({ user_id: user.UpdatedBy }) : null,
+      User_Address.find({ user_id: user.user_id, Status: true }).sort({ is_default: -1, CreateAt: -1 })
     ]);
 
     // Create response object with populated data
@@ -355,6 +423,7 @@ const getUserByAuth = async (req, res) => {
     userResponse.City_id = city ? { City_id: city.City_id, City_name: city.City_name, Code: city.Code } : null;
     userResponse.CreateBy = createByUser ? { user_id: createByUser.user_id, Name: createByUser.Name, email: createByUser.email } : null;
     userResponse.UpdatedBy = updatedByUser ? { user_id: updatedByUser.user_id, Name: updatedByUser.Name, email: updatedByUser.email } : null;
+    userResponse.addresses = userAddresses || [];
 
     // Remove password from response
     // delete userResponse.password;
@@ -564,7 +633,7 @@ const getUserByRole = async (req, res) => {
 
     // Manually fetch related data for all users
     const usersResponse = await Promise.all(users.map(async (user) => {
-      const [responsibility, role, userCategory, language, country, state, city, createByUser] = await Promise.all([
+      const [responsibility, role, userCategory, language, country, state, city, createByUser, userAddresses] = await Promise.all([
         Responsibility.findOne({ Responsibility_id: user.Responsibility_id }),
         Role.findOne({ Role_id: user.Role_id }),
         user.User_Category_id ? User_Category.findOne({ User_Category_id: user.User_Category_id }) : null,
@@ -572,7 +641,8 @@ const getUserByRole = async (req, res) => {
         Country.findOne({ Country_id: user.Country_id }),
         State.findOne({ State_id: user.State_id }),
         City.findOne({ City_id: user.City_id }),
-        user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null
+        user.CreateBy ? User.findOne({ user_id: user.CreateBy }) : null,
+        User_Address.find({ user_id: user.user_id, Status: true }).sort({ is_default: -1, CreateAt: -1 })
       ]);
 
       const userObj = user.toObject();
@@ -612,6 +682,7 @@ const getUserByRole = async (req, res) => {
         Name: createByUser.Name, 
         email: createByUser.email 
       } : null;
+      userObj.addresses = userAddresses || [];
 
       // Remove sensitive information
       delete userObj.password;

@@ -22,11 +22,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Check if user is active
-    if (!user.Status || !user.isLoginPermission) {
+    // Check if user is active and has login permission
+    if (!user.Status || !user.account_active || !user.isLoginPermission) {
       return res.status(401).json({
         success: false,
-        message: 'Account is disabled. Please contact administrator.'
+        message: 'Account is disabled or login permission denied. Please contact administrator.'
       });
     }
 
@@ -124,11 +124,11 @@ const adminLogin = async (req, res) => {
       });
     }
 
-    // Check if user is active
-    if (!user.Status || !user.isLoginPermission) {
+    // Check if user is active and has login permission
+    if (!user.Status || !user.account_active || !user.isLoginPermission) {
       return res.status(401).json({
         success: false,
-        message: 'Account is disabled. Please contact administrator.'
+        message: 'Account is disabled or login permission denied. Please contact administrator.'
       });
     }
 
