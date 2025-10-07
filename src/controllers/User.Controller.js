@@ -81,7 +81,6 @@ const createUser = async (req, res) => {
       Employee_id,
       email,
       phone,
-      password,
       gender,
       user_image,
       OnboardingDate,

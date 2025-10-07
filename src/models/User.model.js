@@ -194,31 +194,6 @@ userSchema.set('toJSON', {
   virtuals: true
 });
 
-// Simple password hashing (for development only - not recommended for production)
-userSchema.pre('save', function(next) {
-  if (!this.isModified('password')) return next();
-  
-  try {
-    // Simple hash with timestamp as salt (NOT SECURE - for development only)
-    const timestamp = Date.now().toString();
-    const simpleHash = this.password + timestamp;
-    this.password = timestamp + ':' + simpleHash;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
-// Method to compare password
-userSchema.methods.comparePassword = function(candidatePassword) {
-  const parts = this.password.split(':');
-  if (parts.length !== 2) return false;
-  
-  const timestamp = parts[0];
-  const storedHash = parts[1];
-  const candidateHash = candidatePassword + timestamp;
-  
-  return storedHash === candidateHash;
-};
 
 module.exports = mongoose.model('User', userSchema);
