@@ -11,14 +11,14 @@ const { generateToken } = require('../middleware/authMiddleware');
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    
     // Check if user exists
     const user = await User.findOne({ email });
-    
+  
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: 'Invalid email'
       });
     }
 
@@ -31,11 +31,11 @@ const loginUser = async (req, res) => {
     }
 
     // Verify password
-    const isPasswordValid = user.comparePassword(password);
-    if (!isPasswordValid) {
+   
+    if (user.password !== password) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password'
+        message: 'Invalid password'
       });
     }
 
@@ -210,8 +210,8 @@ const changePassword = async (req, res) => {
     }
 
     // Verify current password
-    const isCurrentPasswordValid = user.comparePassword(currentPassword);
-    if (!isCurrentPasswordValid) {
+   
+    if (user.password !== currentPassword) {
       return res.status(400).json({
         success: false,
         message: 'Current password is incorrect'
