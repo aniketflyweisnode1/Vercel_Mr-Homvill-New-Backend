@@ -175,6 +175,10 @@ const userSchema = new mongoose.Schema({
   account_active: {
     type: Boolean,
     default: true
+  },
+  isNotification: {
+    type: Boolean,
+    default: true
   }
 
 }, {

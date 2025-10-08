@@ -11,7 +11,9 @@ const {
   getUserByRole,
   logout,
   activateUser,
-  deactivateUser
+  deactivateUser,
+  activateNotification,
+  deactivateNotification
 } = require('../../controllers/User.Controller.js');
 const {
   loginUser,
@@ -78,5 +80,9 @@ router.post('/forget-password/reset-password', validateVerifyOTPAndResetPassword
 // Account activation/deactivation routes 15/09/2025
 router.patch('/activate', auth, activateUser);
 router.patch('/deactivate', auth, deactivateUser);
+
+// Notification activation/deactivation routes
+router.patch('/notification_activate', auth, activateNotification);
+
 
 module.exports = router;

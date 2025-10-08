@@ -709,6 +709,86 @@ const getUserByRole = async (req, res) => {
   }
 };
 
+// Activate Notification
+const activateNotification = async (req, res) => {
+  try {
+    const { user_id, isNotification } = req.body;
+
+    // Use authenticated user's ID if user_id is not provided
+    const targetUserId = user_id || req.user.user_id;
+
+    const user = await User.findOne({ user_id: parseInt(targetUserId) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    user.isNotification = isNotification;
+    user.UpdatedBy = req.user.user_id;
+    user.UpdatedAt = new Date();
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification activated successfully',
+      data: {
+        user_id: user.user_id,
+        isNotification: user.isNotification
+      }
+    });
+  } catch (error) {
+    console.error('Error activating notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
+// Deactivate Notification
+const deactivateNotification = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+
+    // Use authenticated user's ID if user_id is not provided
+    const targetUserId = user_id || req.user.user_id;
+
+    const user = await User.findOne({ user_id: parseInt(targetUserId) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    user.isNotification = false;
+    user.UpdatedBy = req.user.user_id;
+    user.UpdatedAt = new Date();
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification deactivated successfully',
+      data: {
+        user_id: user.user_id,
+        isNotification: user.isNotification
+      }
+    });
+  } catch (error) {
+    console.error('Error deactivating notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -720,5 +800,7 @@ module.exports = {
   softDeleteUser,
   logout,
   activateUser,
-  deactivateUser
+  deactivateUser,
+  activateNotification,
+  deactivateNotification
 };
